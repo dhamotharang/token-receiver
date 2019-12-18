@@ -48,7 +48,8 @@ namespace Token.Controllers
                 await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
                 var browser = await Puppeteer.LaunchAsync(new LaunchOptions
                 {
-                    Headless = true
+                    Headless = true,
+                    Args = new []{"--no-sandbox --disable-setuid-sandbox"}
                 });
 
                 var page = await browser.NewPageAsync();
