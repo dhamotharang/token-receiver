@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: {{ .Values.registry }}/token-receivers:{{ .Release.Namespace }}-{{ .Chart.Version }}
+          image: {{ .Values.registry }}/token-receiver:{{ .Release.Namespace }}-{{ .Chart.Version }}
           ports:
             - containerPort: {{ $appPort }}
           livenessProbe:
