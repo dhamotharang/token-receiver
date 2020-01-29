@@ -38,7 +38,7 @@ namespace Token.Controllers
             async Task<bool> IsValidToken(string authToken)
             {
                 Client.SetBearerToken(authToken);
-                using var response = await Client.GetAsync("/en/api/1.0/locations/regions");
+                using var response = await Client.GetAsync("/en/api/1.0/customers");
                 return response.IsSuccessStatusCode;
             }
 
@@ -79,7 +79,7 @@ namespace Token.Controllers
         private HttpClient Client => _client ??= _clientFactory.CreateClient("edo");
 
 
-        private static readonly TimeSpan DefaultLocationCachingTime = TimeSpan.FromDays(1);
+        private static readonly TimeSpan DefaultLocationCachingTime = TimeSpan.FromMinutes(9.5);
         private readonly IHttpClientFactory _clientFactory;
         private readonly IMemoryFlow _flow;
         private HttpClient _client;
