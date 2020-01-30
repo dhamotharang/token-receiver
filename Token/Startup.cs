@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using FloxDc.CacheFlow.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.Net.Http.Headers;
 
 namespace Token
 {
@@ -37,6 +35,13 @@ namespace Token
             {
                 client.BaseAddress = new Uri("https://edo-api.dev.happytravel.com");
                 client.Timeout = TimeSpan.FromHours(1);
+                client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
+                {
+                    NoCache = true,
+                    NoStore = true,
+                    MaxAge = new TimeSpan(0),
+                    MustRevalidate = true
+                };
             });
 
             services.AddSwaggerGen(options =>
