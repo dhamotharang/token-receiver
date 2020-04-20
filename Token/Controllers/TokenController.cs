@@ -75,8 +75,8 @@ namespace Token.Controllers
             await page.GoToAsync("https://dev.happytravel.com/", new NavigationOptions {WaitUntil = new[] {WaitUntilNavigation.DOMContentLoaded}});
             await page.WaitForNavigationAsync();
 
-            await page.EvaluateExpressionAsync($"document.getElementById('Input_UserName').value = '{login.UserName}';");
-            await page.EvaluateExpressionAsync($"document.getElementById('Input_Password').value = '{login.Password}';");
+            await page.EvaluateExpressionAsync($"document.getElementById('Input_UserName').value = '{login.UserName}'; " +
+                $"document.getElementById('Input_Password').value = '{login.Password}';");
             await page.ClickAsync("form button[type='submit']");
 
             //avoiding OPTIONS request from React

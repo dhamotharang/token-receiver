@@ -21,7 +21,6 @@ namespace Token
         public IConfiguration Configuration { get; }
 
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -31,19 +30,6 @@ namespace Token
                 .AddMemoryFlow()
                 .AddHealthChecks();
 
-            services.AddHttpClient("edo", client =>
-            {
-                client.BaseAddress = new Uri("https://edo-api.dev.happytravel.com");
-                client.Timeout = TimeSpan.FromHours(1);
-                client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
-                {
-                    NoCache = true,
-                    NoStore = true,
-                    MaxAge = new TimeSpan(0),
-                    MustRevalidate = true
-                };
-            });
-
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1.0", new OpenApiInfo { Title = "HappyTravel.com Dev get token API", Version = "v1.0" });
@@ -51,7 +37,6 @@ namespace Token
         }
 
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
