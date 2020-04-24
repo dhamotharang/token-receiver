@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FloxDc.CacheFlow;
 using FloxDc.CacheFlow.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using PuppeteerSharp;
 using Token.Models;
 
@@ -30,25 +31,28 @@ namespace Token.Controllers
 
             var token = await GetTokenFromIdentity(login);
 
-            _flow.Set(cacheKey, token, GetCachingThreshold(token));
+            _flow.Set(cacheKey, token, new MemoryCacheEntryOptions
+            {
+                AbsoluteExpiration = GetCachingThreshold(token)
+            });
             return token;
         }
 
 
-        private static TimeSpan GetCachingThreshold(string token)
+        private static DateTimeOffset GetCachingThreshold(string token)
         {
             var handler = new JwtSecurityTokenHandler();
             var parsedToken = handler.ReadJwtToken(token);
             var timestamp = parsedToken.Payload.Exp;
             if (!timestamp.HasValue)
-                return TimeSpan.Zero;
+                return DateTimeOffset.Now;
 
             var dtDateTime = new DateTime(1970,1,1,0,0,0,0,DateTimeKind.Utc)
                 .AddSeconds(timestamp.Value)
                 .AddSeconds(-30)
                 .ToLocalTime();
 
-            return TimeSpan.FromTicks(dtDateTime.Ticks);
+            return new DateTimeOffset(dtDateTime);
         }
 
 
