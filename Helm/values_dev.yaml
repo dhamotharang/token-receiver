@@ -1,3 +1,6 @@
+env:
+  ASPNETCORE_ENVIRONMENT: "Development"
+  HTDC_TOKEN_RECEIVER_SENTRY_ENDPOINT: "https://b2d130c8da05465a84b57806fb566d56@sentry.dev.happytravel.com/28"
 ingress:
   enabled: true
   annotations:

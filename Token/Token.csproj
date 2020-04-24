@@ -6,10 +6,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="FloxDc.CacheFlow" Version="1.6.0" />
-      <PackageReference Include="IdentityModel" Version="4.1.1" />
-      <PackageReference Include="PuppeteerSharp" Version="2.0.0" />
-      <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc5" />
+      <PackageReference Include="FloxDc.CacheFlow" Version="1.6.4" />
+      <PackageReference Include="HappyTravel.ErrorHandling" Version="1.0.0" />
+      <PackageReference Include="HappyTravel.StdOutLogger" Version="1.0.12" />
+      <PackageReference Include="IdentityModel" Version="4.2.0" />
+      <PackageReference Include="PuppeteerSharp" Version="2.0.3" />
+      <PackageReference Include="Sentry.AspNetCore" Version="2.1.2-beta2" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.3" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.0" />
     </ItemGroup>
 

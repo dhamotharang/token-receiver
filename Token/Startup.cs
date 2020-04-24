@@ -1,20 +1,20 @@
-using System;
 using FloxDc.CacheFlow.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System.Net.Http.Headers;
+using HappyTravel.ErrorHandling.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Token
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
+            _loggerFactory = loggerFactory;
         }
 
 
@@ -23,6 +23,7 @@ namespace Token
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddProblemDetailsFactory();
             services.AddControllers();
 
             services
@@ -39,8 +40,8 @@ namespace Token
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-                app.UseDeveloperExceptionPage();
+            var logger = _loggerFactory.CreateLogger<Startup>();
+            app.UseProblemDetailsExceptionHandler(env, logger);
 
             app.UseRouting();
 
@@ -59,5 +60,8 @@ namespace Token
                 endpoints.MapHealthChecks("/health");
             });
         }
+
+
+        private readonly ILoggerFactory _loggerFactory;
     }
 }
