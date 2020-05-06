@@ -7,8 +7,10 @@ using FloxDc.CacheFlow;
 using FloxDc.CacheFlow.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using PuppeteerSharp;
 using Token.Models;
+using Token.Services;
 
 namespace Token.Controllers
 {
@@ -16,9 +18,11 @@ namespace Token.Controllers
     [Route("[controller]")]
     public class TokenController : ControllerBase
     {
-        public TokenController(IMemoryFlow flow)
+        public TokenController(IMemoryFlow flow, IOptions<BaseUrlOptions> options, PageFactory pageFactory)
         {
             _flow = flow;
+            _options = options.Value;
+            _pageFactory = pageFactory;
         }
 
 
@@ -26,10 +30,10 @@ namespace Token.Controllers
         public async Task<string> GetToken(LoginInfo login)
         {
             var cacheKey = _flow.BuildKey(nameof(TokenController), login.UserName);
-            if (_flow.TryGetValue(cacheKey, out string result))
-                return result;
+            if (_flow.TryGetValue(cacheKey, out string token))
+                return token;
 
-            var token = await GetTokenFromIdentity(login);
+            token = await GetTokenFromIdentity(login, _pageFactory, _options);
 
             _flow.Set(cacheKey, token, new MemoryCacheEntryOptions
             {
@@ -55,28 +59,12 @@ namespace Token.Controllers
             return new DateTimeOffset(dtDateTime);
         }
 
-
-        private static async ValueTask<Page> GetNewPage()
-        {
-            if (_browser is null)
-            {
-                await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
-                _browser = await Puppeteer.LaunchAsync(new LaunchOptions
-                {
-                    Headless = true,
-                    Args = new []{"--no-sandbox --disable-setuid-sandbox --incognito"}
-                });
-            }
-
-            return await _browser.NewPageAsync();
-        }
-
         
-        private static async Task<string> GetTokenFromIdentity(LoginInfo login)
+        private static async Task<string> GetTokenFromIdentity(LoginInfo login, PageFactory factory, BaseUrlOptions options)
         {
-            using var page = await GetNewPage();
+            var page = await factory.Get();
 
-            await page.GoToAsync("https://dev.happytravel.com/", new NavigationOptions {WaitUntil = new[] {WaitUntilNavigation.DOMContentLoaded}});
+            await page.GoToAsync(options.Application);
             await page.WaitForNavigationAsync();
 
             await page.EvaluateExpressionAsync($"document.getElementById('Input_UserName').value = '{login.UserName}'; " +
@@ -86,13 +74,11 @@ namespace Token.Controllers
             //avoiding OPTIONS request from React
             for (var i = 0; i < MaxAttemptNumber; i++)
             {
-                var request = await page.WaitForRequestAsync("https://edo-api.dev.happytravel.com/en/api/1.0/locations/regions");
+                var request = await page.WaitForRequestAsync($"{options.Api}locations/regions");
                 if (request.Method == HttpMethod.Options)
                     continue;
 
-                await page.GoToAsync("https://dev.happytravel.com/logout", new NavigationOptions {WaitUntil = new[] {WaitUntilNavigation.DOMContentLoaded}});
-                await page.WaitForNavigationAsync();
-
+                await factory.Dispose(page);
                 return ParseToken(request);
             }
 
@@ -109,9 +95,10 @@ namespace Token.Controllers
         }
 
 
-        private static Browser _browser;
         private const int MaxAttemptNumber = 5;
 
         private readonly IMemoryFlow _flow;
+        private readonly BaseUrlOptions _options;
+        private readonly PageFactory _pageFactory;
     }
 }
