@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using HappyTravel.ErrorHandling.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Token.Services;
 
 namespace Token
 {
@@ -25,6 +27,20 @@ namespace Token
         {
             services.AddProblemDetailsFactory();
             services.AddControllers();
+            services.Configure<BaseUrlOptions>(o =>
+            {
+                o.Api = Configuration["BaseUrls:Api"];
+                o.Application = Configuration["BaseUrls:Application"];
+            });
+            services.AddSingleton(provider =>
+            {
+                var options = provider.GetService<IOptions<BaseUrlOptions>>();
+
+                var factory = new PageFactory(options);
+                factory.Init().GetAwaiter().GetResult();
+
+                return factory;
+            });
 
             services
                 .AddMemoryCache()
