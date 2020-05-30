@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using HappyTravel.ErrorHandling.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Token.Infrastructure;
 using Token.Services;
 
 namespace Token
@@ -45,7 +46,8 @@ namespace Token
             services
                 .AddMemoryCache()
                 .AddMemoryFlow()
-                .AddHealthChecks();
+                .AddHealthChecks()
+                .AddCheck<ControllerResolveHealthCheck>(nameof(ControllerResolveHealthCheck));
 
             services.AddSwaggerGen(options =>
             {
