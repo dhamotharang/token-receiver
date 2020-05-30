@@ -21,7 +21,7 @@ namespace Token.Services
             _browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
                 Headless = true,
-                Args = new []{"--no-sandbox --disable-setuid-sandbox --incognito --user-data-dir=/tmp/session-123"}
+                Args = new []{"--no-sandbox --disable-setuid-sandbox --incognito --user-data-dir=/tmp/session-123 --disable-dev-shm-usage"}
             });
 
             for (var i = 0; i < StackLimit; i++)
