@@ -53,6 +53,9 @@ namespace Token
             {
                 options.SwaggerDoc("v1.0", new OpenApiInfo { Title = "HappyTravel.com Dev get token API", Version = "v1.0" });
             });
+
+            services.AddMvcCore()
+                .AddControllersAsServices();
         }
 
 
