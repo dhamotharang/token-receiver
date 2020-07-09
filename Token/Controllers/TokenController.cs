@@ -74,7 +74,7 @@ namespace Token.Controllers
             //avoiding OPTIONS request from React
             for (var i = 0; i < MaxAttemptNumber; i++)
             {
-                var request = await page.WaitForRequestAsync($"{options.Api}locations/regions");
+                var request = await page.WaitForRequestAsync($"{options.Api}agents");
                 if (request.Method == HttpMethod.Options)
                     continue;
 
