@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using HappyTravel.ErrorHandling.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Token.Infrastructure;
 using Token.Services;
 
 namespace Token
@@ -45,12 +46,16 @@ namespace Token
             services
                 .AddMemoryCache()
                 .AddMemoryFlow()
-                .AddHealthChecks();
+                .AddHealthChecks()
+                .AddCheck<ControllerResolveHealthCheck>(nameof(ControllerResolveHealthCheck));
 
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1.0", new OpenApiInfo { Title = "HappyTravel.com Dev get token API", Version = "v1.0" });
             });
+
+            services.AddMvcCore()
+                .AddControllersAsServices();
         }
 
 

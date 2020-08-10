@@ -71,15 +71,22 @@ namespace Token.Controllers
                 $"document.getElementById('Input_Password').value = '{login.Password}';");
             await page.ClickAsync("form button[type='submit']");
 
-            //avoiding OPTIONS request from React
-            for (var i = 0; i < MaxAttemptNumber; i++)
+            try
             {
-                var request = await page.WaitForRequestAsync($"{options.Api}locations/regions");
-                if (request.Method == HttpMethod.Options)
-                    continue;
+                //avoiding OPTIONS request from React
+                for (var i = 0; i < MaxAttemptNumber; i++)
+                {
+                    var request = await page.WaitForRequestAsync($"{options.Api}agents");
+                    if (request.Method == HttpMethod.Options)
+                        continue;
 
-                await factory.Dispose(page);
-                return ParseToken(request);
+                    await factory.Dispose(page);
+                    return ParseToken(request);
+                }
+            }
+            catch (TimeoutException ex)
+            {
+                throw new Exception($"Can't login the user with following credentials. Reason: {ex.Message}");
             }
 
             throw new Exception("Unable to obtain a token.");

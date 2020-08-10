@@ -21,7 +21,7 @@ namespace Token.Services
             _browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
                 Headless = true,
-                Args = new []{"--no-sandbox --disable-setuid-sandbox --incognito --user-data-dir=/tmp/session-123"}
+                Args = new []{"--no-sandbox --disable-setuid-sandbox --incognito --user-data-dir=/tmp/session-123 --disable-dev-shm-usage"}
             });
 
             for (var i = 0; i < StackLimit; i++)
@@ -32,12 +32,18 @@ namespace Token.Services
         }
 
 
-        public void Dispose() 
-            => _browser.Dispose();
+        public void Dispose()
+        {
+            if (!_browser.IsClosed)
+                _browser.Dispose();
+        }
 
 
         public async Task Dispose(Page page)
         {
+            if (page.IsClosed)
+                return;
+
             await page.GoToAsync($"{_options.Application}logout");
             await page.WaitForNavigationAsync();
 
@@ -52,6 +58,9 @@ namespace Token.Services
         {
             if (_pageStack.TryPop(out var page))
                 return page;
+
+            if (_browser.IsClosed)
+                await Init();
 
             return await _browser.NewPageAsync();
         }
