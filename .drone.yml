@@ -54,8 +54,8 @@ steps:
     GITHUB_TOKEN:
       from_secret: GITHUB_TOKEN
   settings:
-    registry: registry.dev.happytravel.com
-    repo: registry.dev.happytravel.com/token-receiver
+    registry: registry.happytravel.com
+    repo: registry.happytravel.com/token-receiver
     tags:
       - ${DRONE_COMMIT_SHA:0:7}
       - ${DRONE_COMMIT_BRANCH}
