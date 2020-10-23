@@ -6,9 +6,9 @@ using PuppeteerSharp;
 
 namespace Token.Services
 {
-    public class PageFactory : IDisposable
+    public abstract class PageFactory : IDisposable
     {
-        public PageFactory(IOptions<BaseUrlOptions> options)
+        protected PageFactory(IOptions<BaseUrlOptions> options)
         {
             _options = options.Value;
             _pageStack = new ConcurrentStack<Page>();
@@ -17,7 +17,7 @@ namespace Token.Services
 
         public async Task Init()
         {
-            await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
+            //await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
             _browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
                 Headless = true,
