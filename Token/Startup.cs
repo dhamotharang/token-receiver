@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using FloxDc.CacheFlow.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +10,8 @@ using HappyTravel.ErrorHandling.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Token.Infrastructure;
+using Token.Models;
+using Token.Options;
 using Token.Services;
 
 namespace Token
@@ -28,16 +32,24 @@ namespace Token
         {
             services.AddProblemDetailsFactory();
             services.AddControllers();
-            services.Configure<BaseUrlOptions>(o =>
+            services.Configure<ApplicationOptions>(appOptions =>
             {
-                o.Api = Configuration["BaseUrls:Api"];
-                o.Application = Configuration["BaseUrls:Application"];
+                appOptions.Store[Applications.Matsumoto] = new BaseUrlOptions
+                {
+                    ApiEndpoint = Configuration["Applications:Matsumoto:ApiEndpoint"],
+                    Application = Configuration["Applications:Matsumoto:Application"]
+                };
+                appOptions.Store[Applications.Shuri] = new BaseUrlOptions
+                {
+                    ApiEndpoint = Configuration["Applications:Shuri:ApiEndpoint"],
+                    Application = Configuration["Applications:Shuri:Application"]
+                };
             });
             services.AddSingleton(provider =>
-            {
-                var options = provider.GetService<IOptions<BaseUrlOptions>>();
+            {    
+                var options = provider.GetService<IOptions<ApplicationOptions>>();
 
-                var factory = new PageFactory(options);
+                var factory = new PageFactoryManager(options);
                 factory.Init().GetAwaiter().GetResult();
 
                 return factory;
@@ -55,7 +67,14 @@ namespace Token
             });
 
             services.AddMvcCore()
-                .AddControllersAsServices();
+                .AddControllersAsServices()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.WriteIndented = false;
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, false));
+                });
         }
 
 

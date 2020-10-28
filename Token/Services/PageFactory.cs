@@ -6,9 +6,9 @@ using PuppeteerSharp;
 
 namespace Token.Services
 {
-    public class PageFactory : IDisposable
+    public abstract class PageFactory : IDisposable
     {
-        public PageFactory(IOptions<BaseUrlOptions> options)
+        protected PageFactory(IOptions<BaseUrlOptions> options)
         {
             _options = options.Value;
             _pageStack = new ConcurrentStack<Page>();
@@ -17,11 +17,11 @@ namespace Token.Services
 
         public async Task Init()
         {
-            await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
             _browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
                 Headless = true,
-                Args = new []{"--no-sandbox --disable-setuid-sandbox --incognito --user-data-dir=/tmp/session-123 --disable-dev-shm-usage"}
+                Args = new []{"--no-sandbox --disable-setuid-sandbox --incognito --user-data-dir=/tmp/session-123 --disable-dev-shm-usage"},
+                ExecutablePath = (await GetRevisionInfo()).ExecutablePath
             });
 
             for (var i = 0; i < StackLimit; i++)
@@ -66,10 +66,15 @@ namespace Token.Services
         }
 
 
-        private const int StackLimit = 8;
+        private static async ValueTask<RevisionInfo> GetRevisionInfo()
+            => _revisionInfo ??= await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
 
+        
+        private const int StackLimit = 8;
+        
         private static Browser _browser;
         private readonly BaseUrlOptions _options;
         private readonly ConcurrentStack<Page> _pageStack;
+        private static RevisionInfo _revisionInfo;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using PuppeteerSharp;
 using Token.Models;
+using Token.Options;
 using Token.Services;
 
 namespace Token.Controllers
@@ -18,28 +20,30 @@ namespace Token.Controllers
     [Route("[controller]")]
     public class TokenController : ControllerBase
     {
-        public TokenController(IMemoryFlow flow, IOptions<BaseUrlOptions> options, PageFactory pageFactory)
+        public TokenController(IMemoryFlow flow, IOptions<ApplicationOptions> options, PageFactoryManager pageFactoryManager)
         {
             _flow = flow;
             _options = options.Value;
-            _pageFactory = pageFactory;
+            _pageFactoryManager = pageFactoryManager;
         }
 
 
-        [HttpPost]
-        public async Task<string> GetToken(LoginInfo login)
+        [HttpPost("{app}")]
+        [ProducesResponseType(typeof(string), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetToken(LoginInfo login, [FromRoute] Applications app)
         {
-            var cacheKey = _flow.BuildKey(nameof(TokenController), login.UserName);
+            var cacheKey = _flow.BuildKey(nameof(TokenController), app.ToString(), login.UserName);
             if (_flow.TryGetValue(cacheKey, out string token))
-                return token;
+                return Ok(token);
 
-            token = await GetTokenFromIdentity(login, _pageFactory, _options);
+            token = await GetTokenFromIdentity(login, _pageFactoryManager.GetFactory(app), _options.Store[app]);
 
             _flow.Set(cacheKey, token, new MemoryCacheEntryOptions
             {
                 AbsoluteExpiration = GetCachingThreshold(token)
             });
-            return token;
+            return Ok(token);
         }
 
 
@@ -76,7 +80,7 @@ namespace Token.Controllers
                 //avoiding OPTIONS request from React
                 for (var i = 0; i < MaxAttemptNumber; i++)
                 {
-                    var request = await page.WaitForRequestAsync($"{options.Api}agents");
+                    var request = await page.WaitForRequestAsync($"{options.ApiEndpoint}");
                     if (request.Method == HttpMethod.Options)
                         continue;
 
@@ -105,7 +109,7 @@ namespace Token.Controllers
         private const int MaxAttemptNumber = 5;
 
         private readonly IMemoryFlow _flow;
-        private readonly BaseUrlOptions _options;
-        private readonly PageFactory _pageFactory;
+        private readonly ApplicationOptions _options;
+        private readonly PageFactoryManager _pageFactoryManager;
     }
 }
