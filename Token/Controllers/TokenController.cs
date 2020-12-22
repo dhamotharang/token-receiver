@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -68,15 +69,15 @@ namespace Token.Controllers
         {
             var page = await factory.Get();
 
-            await page.GoToAsync(options.Application);
-            await page.WaitForNavigationAsync();
-
-            await page.EvaluateExpressionAsync($"document.getElementById('Input_UserName').value = '{login.UserName}'; " +
-                $"document.getElementById('Input_Password').value = '{login.Password}';");
-            await page.ClickAsync("form button[type='submit']");
-
             try
             {
+                await page.GoToAsync(options.Application);
+                await page.WaitForNavigationAsync();
+
+                await page.EvaluateExpressionAsync($"document.getElementById('Input_UserName').value = '{login.UserName}';" +
+                    $"document.getElementById('Input_Password').value = '{login.Password}';" + 
+                     "document.getElementsByClassName('button')[0].click();");
+
                 //avoiding OPTIONS request from React
                 for (var i = 0; i < MaxAttemptNumber; i++)
                 {
@@ -84,7 +85,6 @@ namespace Token.Controllers
                     if (request.Method == HttpMethod.Options)
                         continue;
 
-                    await factory.Dispose(page);
                     return ParseToken(request);
                 }
             }
@@ -92,13 +92,22 @@ namespace Token.Controllers
             {
                 throw new Exception($"Can't login the user with following credentials. Reason: {ex.Message}");
             }
-
-            throw new Exception("Unable to obtain a token.");
-
-
-            static string ParseToken(Request request1)
+            catch (Exception)
             {
-                var headerValue = request1.Headers["authorization"];
+                throw new Exception("Unable to obtain a token.");
+            }
+            finally
+            {
+                await factory.Dispose(page);
+            }
+
+            return string.Empty;
+            
+
+            static string ParseToken(Request request)
+            {
+                var headerValue =
+                    request.Headers.Single(h => h.Key.ToUpperInvariant().Equals("AUTHORIZATION")).Value;
                 var header = AuthenticationHeaderValue.Parse(headerValue);
 
                 return header.Parameter;
