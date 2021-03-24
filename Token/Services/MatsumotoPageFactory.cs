@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Options;
+﻿using HappyTravel.TokenReceiver.Api.Options;
+using Microsoft.Extensions.Options;
 
-namespace Token.Services
+namespace HappyTravel.TokenReceiver.Api.Services
 {
     public class MatsumotoPageFactory : PageFactory
     {

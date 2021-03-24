@@ -11,11 +11,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using PuppeteerSharp;
-using Token.Models;
-using Token.Options;
-using Token.Services;
+using HappyTravel.TokenReceiver.Api.Models;
+using HappyTravel.TokenReceiver.Api.Options;
+using HappyTravel.TokenReceiver.Api.Services;
 
-namespace Token.Controllers
+namespace HappyTravel.TokenReceiver.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]

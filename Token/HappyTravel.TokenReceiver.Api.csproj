@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <LangVersion>9</LangVersion>
+        <TargetFramework>netcoreapp5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FloxDc.CacheFlow" Version="1.8.0" />
+      <PackageReference Include="HappyTravel.ErrorHandling" Version="1.0.0" />
+      <PackageReference Include="HappyTravel.StdOutLogger" Version="1.0.18" />
+      <PackageReference Include="IdentityModel" Version="4.5.0" />
+      <PackageReference Include="PuppeteerSharp" Version="2.0.4" />
+      <PackageReference Include="Sentry.AspNetCore" Version="2.1.8" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
+    </ItemGroup>
+
+
+</Project>
