@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HappyTravel.TokenReceiver.Api", "Token\HappyTravel.TokenReceiver.Api.csproj", "{9FDB1E8B-ACA5-435C-B794-8DC2A26F124B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HappyTravel.TokenReceiver.Api", "HappyTravel.TokenReceiver.Api\HappyTravel.TokenReceiver.Api.csproj", "{DB8B17E3-1C03-4CE1-853D-E97B5CBDDAFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9FDB1E8B-ACA5-435C-B794-8DC2A26F124B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9FDB1E8B-ACA5-435C-B794-8DC2A26F124B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9FDB1E8B-ACA5-435C-B794-8DC2A26F124B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9FDB1E8B-ACA5-435C-B794-8DC2A26F124B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB8B17E3-1C03-4CE1-853D-E97B5CBDDAFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB8B17E3-1C03-4CE1-853D-E97B5CBDDAFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB8B17E3-1C03-4CE1-853D-E97B5CBDDAFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB8B17E3-1C03-4CE1-853D-E97B5CBDDAFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

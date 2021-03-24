@@ -11,7 +11,7 @@ WORKDIR /src
 COPY *.sln ./
 COPY . .
 RUN dotnet restore
-WORKDIR /src/Token
+WORKDIR /src/HappyTravel.TokenReceiver.Api
 RUN dotnet build -c Release -o /app
 
 FROM build AS publish
@@ -23,4 +23,4 @@ WORKDIR /app
 COPY --from=publish /app .
 HEALTHCHECK --interval=6s --timeout=10s --retries=3 CMD curl -sS 127.0.0.1/health || exit 1
 
-ENTRYPOINT ["dotnet", "Token.dll"]
+ENTRYPOINT ["dotnet", "HappyTravel.TokenReceiver.Api.dll"]
