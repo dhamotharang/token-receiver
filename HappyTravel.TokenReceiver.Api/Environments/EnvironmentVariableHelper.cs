@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-namespace Token.Environments
+namespace HappyTravel.TokenReceiver.Api.Environments
 {
     public static class EnvironmentVariableHelper
     {

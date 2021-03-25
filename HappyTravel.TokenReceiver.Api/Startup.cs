@@ -9,12 +9,12 @@ using Microsoft.OpenApi.Models;
 using HappyTravel.ErrorHandling.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Token.Infrastructure;
-using Token.Models;
-using Token.Options;
-using Token.Services;
+using HappyTravel.TokenReceiver.Api.Infrastructure;
+using HappyTravel.TokenReceiver.Api.Models;
+using HappyTravel.TokenReceiver.Api.Options;
+using HappyTravel.TokenReceiver.Api.Services;
 
-namespace Token
+namespace HappyTravel.TokenReceiver.Api
 {
     public class Startup
     {

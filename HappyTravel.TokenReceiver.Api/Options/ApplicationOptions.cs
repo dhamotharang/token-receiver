@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Token.Models;
+using HappyTravel.TokenReceiver.Api.Models;
 
-namespace Token.Options
+namespace HappyTravel.TokenReceiver.Api.Options
 {
     public class ApplicationOptions
     {

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using Token.Models;
-using Token.Options;
+using HappyTravel.TokenReceiver.Api.Models;
+using HappyTravel.TokenReceiver.Api.Options;
 
-namespace Token.Services
+namespace HappyTravel.TokenReceiver.Api.Services
 {
     public class PageFactoryManager : IDisposable
     {

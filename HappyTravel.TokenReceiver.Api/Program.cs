@@ -3,9 +3,9 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Token.Environments;
+using HappyTravel.TokenReceiver.Api.Environments;
 
-namespace Token
+namespace HappyTravel.TokenReceiver.Api
 {
     public class Program
     {

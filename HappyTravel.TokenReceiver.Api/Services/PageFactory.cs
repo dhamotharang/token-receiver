@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using HappyTravel.TokenReceiver.Api.Options;
 using Microsoft.Extensions.Options;
 using PuppeteerSharp;
 
-namespace Token.Services
+namespace HappyTravel.TokenReceiver.Api.Services
 {
     public abstract class PageFactory : IDisposable
     {

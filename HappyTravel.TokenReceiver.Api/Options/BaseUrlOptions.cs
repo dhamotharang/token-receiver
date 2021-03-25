@@ -1,4 +1,4 @@
-﻿namespace Token
+﻿namespace HappyTravel.TokenReceiver.Api.Options
 {
     public class BaseUrlOptions
     {

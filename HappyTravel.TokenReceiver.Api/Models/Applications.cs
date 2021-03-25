@@ -1,4 +1,4 @@
-﻿namespace Token.Models
+﻿namespace HappyTravel.TokenReceiver.Api.Models
 {
     public enum Applications
     {
