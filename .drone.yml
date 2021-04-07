@@ -10,7 +10,7 @@ trigger:
       - pull_request
 
 steps:
-- name: Test application 
+- name: Test application
   image: mcr.microsoft.com/dotnet/sdk:5.0-focal
   environment:
     GITHUB_TOKEN:
@@ -34,7 +34,7 @@ steps:
       from_secret: DISCORD_WEBHOOK_PR_TOKEN
   when:
     status: [success, failure]
- 
+
 ---
 kind: pipeline
 type: docker
@@ -72,9 +72,9 @@ steps:
   image: pelotech/drone-helm3
   settings:
     mode: upgrade
-    chart: ./Helm_v3/tr
+    chart: ./Helm/tr
     release: tr-dev
-    values_files: ["Helm_v3/tr/values.yaml"]
+    values_files: ["Helm/tr/values.yaml"]
     namespace: dev
     skip_tls_verify: true
     wait_for_upgrade: true
