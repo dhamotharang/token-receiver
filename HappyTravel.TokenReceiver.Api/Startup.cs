@@ -30,7 +30,7 @@ namespace HappyTravel.TokenReceiver.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddProblemDetailsFactory();
+            services.AddProblemDetailsErrorHandling();
             services.AddControllers();
             services.Configure<ApplicationOptions>(appOptions =>
             {
