@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FloxDc.CacheFlow" Version="1.8.0" />
-    <PackageReference Include="HappyTravel.ErrorHandling" Version="1.0.0" />
+    <PackageReference Include="HappyTravel.ErrorHandling" Version="1.2.2" />
     <PackageReference Include="HappyTravel.StdOutLogger" Version="1.4.0" />
     <PackageReference Include="IdentityModel" Version="4.5.0" />
     <PackageReference Include="PuppeteerSharp" Version="2.0.4" />
